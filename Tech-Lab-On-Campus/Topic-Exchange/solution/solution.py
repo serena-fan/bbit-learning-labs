@@ -1,5 +1,6 @@
 import pika
 import os
+import sys
 
 class mqProducer(): 
     
@@ -20,16 +21,17 @@ class mqProducer():
         # Establish Channel
         self.channel = self.connection.channel()
         # Create the exchange if not already present
-        exchange = self.channel.exchange_declare(exchange="Exchange Name")
-        
+        self.channel.exchange_declare(
+            exchange="Exchange Name", exchange_type="topic"
+        )
         # pass
 
     def publishOrder(self, message: str) -> None:
         # Basic Publish to Exchange
         self.channel.basic_publish(
-            exchange=self.exchange_name,
-            routing_key=self.routing_key,
-            body=message,
+            exchange="Exchange Name",
+            routing_key="Routing Key",
+            body="Message",
         )
         # Close Channel
         self.channel.close()
@@ -37,3 +39,9 @@ class mqProducer():
         self.connection.close()
     
         # pass
+
+# print("Name of the program using sys.argv[0]: ", sys.argv[0])
+# print("Length of arguments given including program name: ", len(sys.argv))
+# print("Argument list: ", sys.argv)
+# print("Argument list type: ", type(sys.argv))
+# print("Give the first argument (after program name): ", sys.argv[1])
